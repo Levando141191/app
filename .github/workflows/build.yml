@@ -1,0 +1,36 @@
+name: Build Python to EXE
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        if (Test-Path "requirements.txt") { pip install -r requirements.txt }
+
+    - name: Build with PyInstaller
+      run: |
+        # Đã tích hợp kèm file database quan_ly_lop_v2.db của bạn vào file .exe
+        pyinstaller --onefile --noconsole --add-data "quan_ly_lop_v2.db;." main.py
+
+    - name: Upload artifact (.exe)
+      uses: actions/upload-artifact@v4
+      with:
+        name: my-windows-executable
+        path: dist/main.exe
