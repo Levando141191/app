@@ -26,8 +26,7 @@ jobs:
 
     - name: Build with PyInstaller
       run: |
-        # Đã tích hợp kèm file database quan_ly_lop_v2.db của bạn vào file .exe
-        pyinstaller --onefile --noconsole --add-data "quan_ly_lop_v2.db;." main.py
+        pyinstaller --onefile --noconsole --collect-all flet --add-data "quan_ly_lop_v2.db;." main.py
 
     - name: Upload artifact (.exe)
       uses: actions/upload-artifact@v4
